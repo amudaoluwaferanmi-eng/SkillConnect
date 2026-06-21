@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillConnect | Learn via WhatsApp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --p1: #8b5cf6; --p2: #d946ef;
+      --grad: linear-gradient(90deg, #8b5cf6, #d946ef);
+      --grad-soft: linear-gradient(90deg, rgba(139,92,246,.15), rgba(217,70,239,.15));
+      --grad-border: linear-gradient(90deg, rgba(139,92,246,.4), rgba(217,70,239,.4));
+      --ink: #0D0D0D; --surface: #141414; --card: #1C1C1C;
+      --border: #2A2A2A; --muted: #888; --white: #F5F5F5;
+      --radius: 14px; --err: #ff4d4d;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--ink); color: var(--white); line-height: 1.6; min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 5vw;
+      background: rgba(13,13,13,.95); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; letter-spacing: -.5px; color: var(--white); cursor: pointer; background: none; border: none; white-space: nowrap; flex-shrink: 0; }
+    .logo span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-center { display: flex; align-items: center; gap: 4px; }
+    .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .nav-btn { font-size: .8rem; font-weight: 500; padding: 7px 14px; border-radius: 8px; cursor: pointer; border: none; transition: background .2s, color .2s; font-family: 'Inter', sans-serif; white-space: nowrap; }
+    .nav-ghost { background: none; color: var(--muted); }
+    .nav-ghost:hover { background: var(--card); color: var(--white); }
+    .nav-pill { background: var(--grad); color: #fff; font-weight: 700; border: none; }
+    .nav-pill:hover { opacity: .9; }
+    .nav-outline { background: none; border: 1px solid var(--border) !important; color: var(--white); }
+    .nav-outline:hover { background: var(--card); }
+    .avatar-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--grad-soft); color: var(--p1); font-weight: 700; font-size: .85rem; display: grid; place-items: center; cursor: pointer; border: 2px solid var(--p1); font-family: 'Syne', sans-serif; flex-shrink: 0; }
+
+    @media (max-width: 580px) {
+      .nav-center { display: none; }
+      nav { padding: 12px 5vw; }
+    }
+
+    /* ── PAGES ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 60px 6vw 100px; }
+    .page-narrow { max-width: 480px; margin: 0 auto; padding: 60px 6vw 100px; }
+    .hidden { display: none !important; }
+
+    /* ── HERO ── */
+    .hero { min-height: 88vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 6vw 60px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(139,92,246,.13), transparent 65%); pointer-events: none; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.3); border-radius: 100px; padding: 6px 16px; font-size: .78rem; font-weight: 600; color: var(--p1); margin-bottom: 26px; }
+    .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5.5vw, 4.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; max-width: 780px; margin-bottom: 18px; }
+    .hero h1 em { font-style: normal; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: clamp(.9rem, 1.8vw, 1.1rem); color: var(--muted); max-width: 500px; margin-bottom: 38px; }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    /* ── PROOF BAR ── */
+    .proof { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 18px 6vw; display: flex; align-items: center; justify-content: center; gap: 36px; flex-wrap: wrap; }
+    .proof-item { font-size: .85rem; color: var(--muted); }
+    .proof-item strong { color: var(--white); }
+    .proof-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+
+    /* ── LABELS ── */
+    .label { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; }
+    .sec-title { font-family: 'Syne', sans-serif; font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+    .sec-sub { color: var(--muted); font-size: .95rem; margin-bottom: 44px; }
+
+    /* ── STEPS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; margin-top: 44px; }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; transition: border-color .2s; }
+    .step:hover { border-color: rgba(139,92,246,.4); }
+    .step-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: .3; line-height: 1; margin-bottom: 14px; }
+    .step h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .step p { font-size: .85rem; color: var(--muted); }
+
+    /* ── CLASS CARDS ── */
+    .classes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
+    .class-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; transition: transform .2s, border-color .2s; position: relative; overflow: hidden; }
+    .class-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--grad); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+    .class-card:hover { transform: translateY(-3px); border-color: rgba(139,92,246,.4); }
+    .class-card:hover::after { transform: scaleX(1); }
+    .class-icon { width: 44px; height: 44px; background: rgba(139,92,246,.1); border-radius: 12px; display: grid; place-items: center; font-size: 1.3rem; }
+    .class-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
+    .class-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 6px; padding: 3px 9px; font-size: .72rem; color: var(--muted); }
+    .premium-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(217,70,239,.1); border: 1px solid rgba(217,70,239,.3); color: #d946ef; border-radius: 6px; padding: 3px 10px; font-size: .72rem; font-weight: 600; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; margin-bottom: 28px; width: fit-content; }
+    .tab-btn { padding: 8px 20px; border-radius: 7px; border: none; cursor: pointer; font-size: .85rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all .2s; }
+    .tab-active { background: var(--grad); color: #fff; }
+    .tab-inactive { background: none; color: var(--muted); }
+    .tab-inactive:hover { color: var(--white); }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 7px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: .9rem; padding: 11px 20px; border-radius: 10px; cursor: pointer; border: none; text-decoration: none; transition: all .2s; }
+    .btn-grad { background: var(--grad); color: #fff; }
+    .btn-grad:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-outline { background: none; border: 1px solid var(--border) !important; color: var(--white); }
+    .btn-outline:hover { background: var(--card); }
+    .btn-purple-outline { background: none; border: 1px solid var(--p1) !important; color: var(--p1); }
+    .btn-purple-outline:hover { background: var(--grad); color: #fff; border-color: transparent !important; }
+    .btn-sm { padding: 8px 16px; font-size: .82rem; }
+    .btn-lg { padding: 14px 30px; font-size: 1rem; }
+    .btn-full { width: 100%; justify-content: center; }
+    .btn-wa { background: #075E54; color: #fff; }
+    .btn-wa:hover { background: #054d44; }
+
+    /* ── WA BAR ── */
+    .wa-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .wa-bar-text h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .wa-bar-text p { font-size: .85rem; color: var(--muted); }
+    .wa-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── REVIEWS ── */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+    .testi-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; }
+    .stars-disp { font-size: .95rem; margin-bottom: 12px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .testi-card blockquote { font-size: .87rem; color: #ccc; line-height: 1.65; margin-bottom: 18px; }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .avatar-sm { width: 34px; height: 34px; border-radius: 50%; background: rgba(139,92,246,.2); display: grid; place-items: center; font-weight: 700; font-size: .82rem; color: var(--p1); flex-shrink: 0; font-family: 'Syne', sans-serif; }
+    .author-name { font-weight: 600; font-size: .82rem; }
+    .author-role { color: var(--muted); font-size: .75rem; }
+
+    /* ── AUTH ── */
+    .auth-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 36px; }
+    .auth-card h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
+    .auth-sub { color: var(--muted); font-size: .88rem; margin-bottom: 32px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .form-group label { font-size: .82rem; font-weight: 600; color: #ccc; }
+    .form-input { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; color: var(--white); font-size: .92rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; width: 100%; }
+    .form-input:focus { border-color: var(--p1); }
+    .form-input::placeholder { color: var(--muted); }
+    .form-error { color: var(--err); font-size: .78rem; margin: 6px 0; }
+    .form-hint { font-size: .75rem; color: var(--muted); margin-top: 4px; }
+    .auth-switch { text-align: center; margin-top: 20px; font-size: .85rem; color: var(--muted); }
+    .auth-switch button { background: none; border: none; color: var(--p1); cursor: pointer; font-weight: 600; font-size: .85rem; }
+
+    /* ── PROFILE ── */
+    .profile-header { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; display: flex; align-items: center; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+    .profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: rgba(139,92,246,.15); border: 3px solid var(--p1); display: grid; place-items: center; font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--p1); flex-shrink: 0; }
+    .profile-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -.5px; }
+    .profile-meta { font-size: .83rem; color: var(--muted); margin-top: 2px; }
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .profile-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .profile-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: .87rem; }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: var(--muted); }
+    .stat-val { font-weight: 600; }
+    .review-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    .r-class { font-size: .75rem; color: var(--p1); margin-bottom: 6px; }
+    .r-text { font-size: .85rem; color: #ccc; line-height: 1.55; }
+    .r-stars { font-size: .85rem; margin-bottom: 4px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .star-select { display: flex; gap: 6px; margin-bottom: 14px; }
+    .star-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; transition: transform .1s; line-height: 1; color: var(--p1); }
+    .star-btn:hover { transform: scale(1.2); }
+
+    /* ── TOAST & FLOAT ── */
+    .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: #222; border: 1px solid var(--border); border-radius: 10px; padding: 12px 24px; font-size: .88rem; font-weight: 500; z-index: 9999; box-shadow: 0 8px 30px rgba(0,0,0,.5); pointer-events: none; animation: fadeUp .3s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateX(-50%) translateY(10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+    .wa-float { position: fixed; bottom: 26px; right: 26px; z-index: 999; width: 52px; height: 52px; background: var(--grad); border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 18px rgba(139,92,246,.4); text-decoration: none; transition: transform .2s; }
+    .wa-float:hover { transform: scale(1.08); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 22px 6vw; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: .78rem; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+    .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--white); }
+    .footer-logo span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── UTILS ── */
+    .mt-12{margin-top:12px} .mt-20{margin-top:20px} .mt-32{margin-top:32px}
+    .mb-20{margin-bottom:20px} .text-muted{color:var(--muted)} .text-sm{font-size:.85rem}
+    .text-center{text-align:center} .flex-col-gap{display:flex;flex-direction:column;gap:10px}
+    .empty-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:40px;text-align:center}
+
+    @media(max-width:640px){
+      .profile-grid{grid-template-columns:1fr}
+      .proof-dot{display:none} .proof{gap:16px}
+      .auth-card{padding:28px 20px}
+      .wa-bar{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <button class="logo" onclick="showPage('home')">Skill<span>Connect</span></button>
+  <div class="nav-center" id="nav-center">
+    <button class="nav-btn nav-ghost" onclick="showPage('home')">Home</button>
+    <button class="nav-btn nav-ghost" onclick="goToClasses('general')">General</button>
+    <button class="nav-btn nav-ghost" onclick="goToClasses('premium')">Premium</button>
+  </div>
+  <div class="nav-right" id="nav-right">
+    <!-- injected by JS -->
+  </div>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div id="page-home">
+  <section class="hero">
+    <div class="badge">&#9889; Learn on WhatsApp — no downloads needed</div>
+    <h1 id="hero-title">Level up your skills<br>right inside <em>WhatsApp</em></h1>
+    <p class="hero-sub" id="hero-sub">Join live classes in Graphics Design, Web Dev, and AI — taught by real practitioners, delivered where you already are.</p>
+    <div class="hero-cta" id="hero-cta"></div>
+  </section>
+
+  <div class="proof">
+    <div class="proof-item"><strong>3</strong> General Classes</div>
+    <div class="proof-dot"></div>
+    <div class="proof-item"><strong>3</strong> Premium Classes</div>
+    <div class="proof-dot"></div>
+    <div class="proof-item"><strong>100%</strong> WhatsApp-Based</div>
+    <div class="proof-dot"></div>
+    <div class="proof-item"><strong>Beginners</strong> Welcome</div>
+  </div>
+
+  <div class="page">
+    <div class="wa-bar">
+      <div class="wa-bar-text">
+        <h3>Stay connected with SkillConnect</h3>
+        <p>Message admin for enquiries or join our WhatsApp channel for updates.</p>
+      </div>
+      <div class="wa-actions">
+        <a href="https://wa.me/2348169518870" target="_blank" class="btn btn-wa btn-sm">&#x1F4AC; Message Admin</a>
+        <a href="https://whatsapp.com/channel/0029VbCNExr0Qeao2RL08325" target="_blank" class="btn btn-purple-outline btn-sm">&#128279; Join Channel</a>
+      </div>
+    </div>
+
+    <div id="how" class="mt-32">
+      <span class="label">How it works</span>
+      <h2 class="sec-title">Simple as sending a message</h2>
+      <p class="sec-sub">No extra apps. No complicated platforms. Just WhatsApp and your drive to learn.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><h3>Sign up in seconds</h3><p>Create your free account and pick the class that matches where you want to grow.</p></div>
+        <div class="step"><div class="step-num">02</div><h3>Join your WhatsApp group</h3><p>You'll get a link to your class group — no installs, no new logins.</p></div>
+        <div class="step"><div class="step-num">03</div><h3>Learn with real projects</h3><p>Follow lessons, submit work, get feedback, and build a portfolio piece.</p></div>
+        <div class="step"><div class="step-num">04</div><h3>Land your first client</h3><p>We guide you on packaging your skills and pricing so you can earn.</p></div>
+      </div>
+    </div>
+
+    <div id="classes" class="mt-32">
+      <span class="label">Available Classes</span>
+      <h2 class="sec-title">Pick your learning path</h2>
+      <p class="sec-sub">All classes run on WhatsApp. Real skills. Real projects. Real results.</p>
+      <div class="tabs">
+        <button id="tab-general" class="tab-btn tab-active" onclick="switchTab('general')">Free General Classes</button>
+        <button id="tab-premium" class="tab-btn tab-inactive" onclick="switchTab('premium')">&#11088; Premium Classes</button>
+      </div>
+      <div id="classes-general" class="classes-grid"></div>
+      <div id="classes-premium" class="classes-grid hidden"></div>
+      <p id="classes-note" class="text-muted text-sm mt-12"></p>
+    </div>
+
+    <div class="mt-32">
+      <span class="label">Student Reviews</span>
+      <h2 class="sec-title">What students are saying</h2>
+      <div id="reviews-container"></div>
+      <p id="review-cta-guest" class="text-sm text-muted mt-12 hidden">
+        <button style="background:none;border:none;color:var(--p1);cursor:pointer;font-weight:600;font-size:.85rem" onclick="showPage('signup')">Sign up to leave a review &rarr;</button>
+      </p>
+      <p id="review-cta-user" class="text-sm text-muted mt-12 hidden">
+        Want to leave a review? Go to your <button style="background:none;border:none;color:var(--p1);cursor:pointer;font-weight:600;font-size:.85rem" onclick="showPage('profile')">profile &rarr;</button>
+      </p>
+    </div>
+
+    <div id="home-bottom-cta" class="mt-32 text-center hidden">
+      <span class="label">Ready to start?</span>
+      <h2 class="sec-title">Your skill journey starts on WhatsApp</h2>
+      <p class="text-muted mb-20">Join hundreds of students learning graphics, web dev, and AI.</p>
+      <button class="btn btn-grad btn-lg" onclick="showPage('signup')">Sign Up &mdash; It&rsquo;s Free</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SIGN UP ══ -->
+<div id="page-signup" class="hidden">
+  <div class="page-narrow">
+    <div class="auth-card">
+      <h2>Create your account</h2>
+      <p class="auth-sub">Join SkillConnect and start learning on WhatsApp today.</p>
+      <div class="form-group"><label>Full Name</label><input class="form-input" id="su-name" placeholder="e.g. Hormo James" /></div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input class="form-input" id="su-phone" placeholder="e.g. 08012345678" />
+        <span class="form-hint">Use the number you have WhatsApp on</span>
+      </div>
+      <div class="form-group"><label>Password</label><input class="form-input" id="su-pass" type="password" placeholder="At least 6 characters" /></div>
+      <p class="form-error hidden" id="su-error"></p>
+      <button class="btn btn-grad btn-full mt-12" onclick="handleSignup()">Create Account</button>
+      <div class="auth-switch">Already have an account? <button onclick="showPage('signin')">Sign in</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SIGN IN ══ -->
+<div id="page-signin" class="hidden">
+  <div class="page-narrow">
+    <div class="auth-card">
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Sign in to your SkillConnect account.</p>
+      <div class="form-group"><label>Phone Number</label><input class="form-input" id="si-phone" placeholder="e.g. 08012345678" /></div>
+      <div class="form-group"><label>Password</label><input class="form-input" id="si-pass" type="password" placeholder="Your password" /></div>
+      <p class="form-error hidden" id="si-error"></p>
+      <button class="btn btn-grad btn-full mt-12" onclick="handleSignin()">Sign In</button>
+      <div class="auth-switch">New here? <button onclick="showPage('signup')">Create an account</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE ══ -->
+<div id="page-profile" class="hidden">
+  <div class="page">
+    <div class="profile-header">
+      <div class="profile-avatar" id="profile-avatar"></div>
+      <div style="flex:1">
+        <div class="profile-name" id="profile-greeting"></div>
+        <div class="profile-meta" id="profile-meta"></div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="handleSignout()">Sign Out</button>
+    </div>
+
+    <div class="wa-bar">
+      <div class="wa-bar-text">
+        <h3>Stay connected with SkillConnect</h3>
+        <p>Message admin for enquiries or join our WhatsApp channel for updates.</p>
+      </div>
+      <div class="wa-actions">
+        <a href="https://wa.me/2348169518870" target="_blank" class="btn btn-wa btn-sm">&#x1F4AC; Message Admin</a>
+        <a href="https://whatsapp.com/channel/0029VbCNExr0Qeao2RL08325" target="_blank" class="btn btn-purple-outline btn-sm">&#128279; Join Channel</a>
+      </div>
+    </div>
+
+    <div class="profile-grid mt-20">
+      <div class="profile-card">
+        <h3>Account Info</h3>
+        <div class="stat-row"><span class="stat-label">Name</span><span class="stat-val" id="pi-name"></span></div>
+        <div class="stat-row"><span class="stat-label">Phone</span><span class="stat-val" id="pi-phone"></span></div>
+        <div class="stat-row"><span class="stat-label">Joined</span><span class="stat-val" id="pi-joined"></span></div>
+        <div class="stat-row"><span class="stat-label">Reviews left</span><span class="stat-val" id="pi-reviews"></span></div>
+      </div>
+      <div class="profile-card">
+        <h3>Quick Links</h3>
+        <div class="flex-col-gap">
+          <button class="btn btn-outline btn-sm" onclick="goToClasses('general')">Browse Free Classes</button>
+          <button class="btn btn-outline btn-sm" onclick="goToClasses('premium')">&#11088; Browse Premium Classes</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card mt-20">
+      <h3>Leave a Review</h3>
+      <p class="text-muted text-sm mb-20">Share your experience to help other students.</p>
+      <div class="form-group">
+        <label>Class</label>
+        <select class="form-input" id="rev-class">
+          <option>Graphics Design</option><option>Web Development</option>
+          <option>AI Images &amp; Video</option><option>Advanced Branding</option>
+          <option>Full-Stack Web Dev</option><option>AI for Freelancers</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Rating</label><div class="star-select" id="star-select"></div></div>
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea class="form-input" id="rev-text" rows="3" placeholder="What did you learn? How was the experience?" style="resize:vertical"></textarea>
+      </div>
+      <button class="btn btn-grad btn-sm" onclick="handleReview()">Submit Review</button>
+    </div>
+
+    <div class="profile-card mt-20">
+      <h3 id="my-reviews-title">Your Reviews</h3>
+      <div id="my-reviews-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOAT -->
+<a href="https://whatsapp.com/channel/0029VbCNExr0Qeao2RL08325" target="_blank" class="wa-float" title="Join our WhatsApp Channel">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.554 4.1 1.523 5.823L0 24l6.344-1.501A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.768.891.935-3.669-.234-.376A9.818 9.818 0 1112 21.818z"/></svg>
+</a>
+
+<div class="toast hidden" id="toast"></div>
+
+<footer>
+  <span class="footer-logo">Skill<span>Connect</span></span>
+  <span>&copy; 2025 SkillConnect. All Rights Reserved.</span>
+  <div style="display:flex;gap:16px">
+    <a href="https://wa.me/2348169518870" target="_blank">Contact</a>
+    <a href="https://whatsapp.com/channel/0029VbCNExr0Qeao2RL08325" target="_blank">Channel</a>
+  </div>
+</footer>
+
+<script>
+const GENERAL = [
+  { icon:'🎨', title:'Graphics Design', desc:'Logo design, flyers, branding & real client briefs — from zero to portfolio-ready.', topics:['Logo Design','Flyers','Branding','Canva / Illustrator'] },
+  { icon:'💻', title:'Web Development', desc:'Build real websites with HTML, CSS & JavaScript. Deploy your first site by week 4.', topics:['HTML & CSS','JavaScript','Responsive Design','Deployment'] },
+  { icon:'✨', title:'AI Images & Video', desc:'Create stunning visuals using AI tools — perfect for creators and designers.', topics:['Prompt Writing','Midjourney','AI Video','Commercial Use'] },
+];
+const PREMIUM = [
+  { icon:'🚀', title:'Advanced Branding', desc:'Deep-dive into brand strategy, identity systems, and premium client management.', topics:['Brand Strategy','Style Guides','Client Pricing','Presentation'] },
+  { icon:'⚡', title:'Full-Stack Web Dev', desc:'Go beyond HTML — React, backend basics, databases, and deploying real apps.', topics:['React','Node.js','Databases','DevOps'] },
+  { icon:'🤖', title:'AI for Freelancers', desc:'Use AI to 10x your output — automate client work, content, and business ops.', topics:['Workflow Automation','AI Tools','Client Delivery','Passive Income'] },
+];
+
+let currentUser = null, selectedStars = 5, toastTimer;
+
+function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+function lsSet(k,v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add('hidden'), 3000);
+}
+
+function showPage(name) {
+  ['home','signup','signin','profile'].forEach(p =>
+    document.getElementById('page-'+p).classList.toggle('hidden', p !== name));
+  window.scrollTo(0,0); clearErrors();
+  if (name === 'home') renderHome();
+  if (name === 'profile') { if (!currentUser) { showPage('signin'); return; } renderProfile(); }
+}
+
+function clearErrors() {
+  ['su-error','si-error'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent=''; el.classList.add('hidden'); }
+  });
+}
+function showError(id, msg) { const el=document.getElementById(id); el.textContent=msg; el.classList.remove('hidden'); }
+
+function renderNav() {
+  document.querySelectorAll('.nav-auth').forEach(e=>e.remove());
+  const right = document.getElementById('nav-right');
+  if (currentUser) {
+    const initials = currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const btn = document.createElement('button');
+    btn.className='avatar-btn nav-auth'; btn.title=currentUser.name; btn.textContent=initials;
+    btn.onclick=()=>showPage('profile'); right.appendChild(btn);
+  } else {
+    const si=document.createElement('button'); si.className='nav-btn nav-outline nav-auth'; si.textContent='Sign In'; si.onclick=()=>showPage('signin');
+    const su=document.createElement('button'); su.className='nav-btn nav-pill nav-auth'; su.textContent='Sign Up'; su.onclick=()=>showPage('signup');
+    right.appendChild(si); right.appendChild(su);
+  }
+}
+
+function renderClassGrid(id, list, isPremium) {
+  document.getElementById(id).innerHTML = list.map(c=>`
+    <div class="class-card">
+      <div class="class-icon">${c.icon}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h3>${c.title}</h3>
+        ${isPremium?'<span class="premium-badge">&#11088; Premium</span>':''}
+      </div>
+      <p>${c.desc}</p>
+      <div class="tags">${c.topics.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      ${isPremium&&!currentUser
+        ?`<button class="btn btn-outline btn-sm" onclick="showPage('signin')">Sign in to unlock</button>`
+        :`<a href="https://wa.me/2348169518870" target="_blank" class="btn btn-purple-outline btn-sm">Join Class &rarr;</a>`}
+    </div>`).join('');
+}
+
+function switchTab(tab) {
+  document.getElementById('classes-general').classList.toggle('hidden', tab!=='general');
+  document.getElementById('classes-premium').classList.toggle('hidden', tab!=='premium');
+  document.getElementById('tab-general').className='tab-btn '+(tab==='general'?'tab-active':'tab-inactive');
+  document.getElementById('tab-premium').className='tab-btn '+(tab==='premium'?'tab-active':'tab-inactive');
+  document.getElementById('classes-note').textContent = tab==='general'
+    ? 'General classes are completely free. Sign up and join via WhatsApp.'
+    : 'Premium classes require payment. Sign up then message admin to get access.';
+}
+
+function goToClasses(tab) {
+  showPage('home');
+  setTimeout(()=>{ switchTab(tab); document.getElementById('classes').scrollIntoView({behavior:'smooth'}); }, 80);
+}
+
+function renderReviews() {
+  const reviews = lsGet('sc:reviews')||[];
+  const c = document.getElementById('reviews-container');
+  c.innerHTML = !reviews.length
+    ? `<div class="empty-box"><p class="text-muted">No reviews yet. Be the first to leave one!</p></div>`
+    : `<div class="testi-grid">${reviews.slice(0,6).map(r=>`
+        <div class="testi-card">
+          <div class="stars-disp">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <blockquote>"${r.text}"</blockquote>
+          <div class="testi-author">
+            <div class="avatar-sm">${r.name[0].toUpperCase()}</div>
+            <div><div class="author-name">${r.name}</div><div class="author-role">${r.className} class</div></div>
+          </div>
+        </div>`).join('')}</div>`;
+  document.getElementById('review-cta-guest').classList.toggle('hidden', !!currentUser);
+  document.getElementById('review-cta-user').classList.toggle('hidden', !currentUser);
+}
+
+function renderHome() {
+  if (currentUser) {
+    const fn = currentUser.name.split(' ')[0];
+    document.getElementById('hero-title').innerHTML=`Welcome back, ${fn}! &#128075;`;
+    document.getElementById('hero-sub').textContent="Pick up where you left off — your classes are waiting.";
+    document.getElementById('hero-cta').innerHTML=`
+      <button class="btn btn-grad btn-lg" onclick="document.getElementById('classes').scrollIntoView({behavior:'smooth'})">Browse Classes</button>
+      <button class="btn btn-outline btn-lg" onclick="showPage('profile')">My Profile</button>`;
+    document.getElementById('home-bottom-cta').classList.add('hidden');
+  } else {
+    document.getElementById('hero-title').innerHTML=`Level up your skills<br>right inside <em>WhatsApp</em>`;
+    document.getElementById('hero-sub').textContent="Join live classes in Graphics Design, Web Dev, and AI — taught by real practitioners, delivered where you already are.";
+    document.getElementById('hero-cta').innerHTML=`
+      <button class="btn btn-grad btn-lg" onclick="showPage('signup')">Join a Class Free</button>
+      <button class="btn btn-outline btn-lg" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>`;
+    document.getElementById('home-bottom-cta').classList.remove('hidden');
+  }
+  renderClassGrid('classes-general',GENERAL,false);
+  renderClassGrid('classes-premium',PREMIUM,true);
+  switchTab('general'); renderReviews();
+}
+
+function renderStars() {
+  document.getElementById('star-select').innerHTML=[1,2,3,4,5].map(n=>
+    `<button class="star-btn" onclick="selectStar(${n})">${n<=selectedStars?'★':'☆'}</button>`).join('');
+}
+function selectStar(n){selectedStars=n;renderStars();}
+
+function renderProfile() {
+  const fn=currentUser.name.split(' ')[0];
+  const initials=currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const reviews=lsGet('sc:reviews')||[];
+  const mine=reviews.filter(r=>r.phone===currentUser.phone);
+  document.getElementById('profile-avatar').textContent=initials;
+  document.getElementById('profile-greeting').textContent=`Hey, ${fn}! 👋`;
+  document.getElementById('profile-meta').textContent=`Member since ${currentUser.joinedAt} · ${currentUser.phone}`;
+  document.getElementById('pi-name').textContent=currentUser.name;
+  document.getElementById('pi-phone').textContent=currentUser.phone;
+  document.getElementById('pi-joined').textContent=currentUser.joinedAt;
+  document.getElementById('pi-reviews').textContent=mine.length;
+  renderStars();
+  document.getElementById('my-reviews-title').textContent=mine.length?`Your Reviews (${mine.length})`:'Your Reviews';
+  document.getElementById('my-reviews-list').innerHTML=mine.length
+    ?mine.map(r=>`
+        <div class="review-item">
+          <div class="r-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <div class="r-class">${r.className}</div>
+          <div class="r-text">"${r.text}"</div>
+          <div class="text-muted text-sm mt-12">${r.date}</div>
+        </div>`).join('')
+    :'<p class="text-muted text-sm">You haven\'t left any reviews yet.</p>';
+}
+
+function handleSignup() {
+  const name=document.getElementById('su-name').value.trim();
+  const phone=document.getElementById('su-phone').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  if(!name) return showError('su-error','Please enter your name.');
+  if(phone.length<7) return showError('su-error','Enter a valid phone number.');
+  if(pass.length<6) return showError('su-error','Password must be at least 6 characters.');
+  if(lsGet('sc:user:'+phone)) return showError('su-error','An account with this phone already exists. Sign in instead.');
+  const joined=new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  lsSet('sc:user:'+phone,{name,phone,joinedAt:joined,pass});
+  const session={name,phone,joinedAt:joined}; lsSet('sc:session',session); currentUser=session;
+  document.getElementById('su-name').value=''; document.getElementById('su-phone').value=''; document.getElementById('su-pass').value='';
+  renderNav(); showPage('home'); showToast(`Welcome, ${name.split(' ')[0]}! 🎉`);
+}
+
+function handleSignin() {
+  const phone=document.getElementById('si-phone').value.trim();
+  const pass=document.getElementById('si-pass').value;
+  if(!phone) return showError('si-error','Enter your phone number.');
+  if(!pass) return showError('si-error','Enter your password.');
+  const stored=lsGet('sc:user:'+phone);
+  if(!stored) return showError('si-error','No account found with that phone number.');
+  if(stored.pass!==pass) return showError('si-error','Incorrect password.');
+  const session={name:stored.name,phone:stored.phone,joinedAt:stored.joinedAt};
+  lsSet('sc:session',session); currentUser=session;
+  document.getElementById('si-phone').value=''; document.getElementById('si-pass').value='';
+  renderNav(); showPage('home'); showToast(`Welcome back, ${session.name.split(' ')[0]}! 👋`);
+}
+
+function handleSignout() {
+  lsSet('sc:session',null); currentUser=null; renderNav(); showPage('home'); showToast('Signed out.');
+}
+
+function handleReview() {
+  const text=document.getElementById('rev-text').value.trim();
+  const cls=document.getElementById('rev-class').value;
+  if(!text) return showToast('Write something before submitting.');
+  const reviews=lsGet('sc:reviews')||[];
+  reviews.unshift({id:Date.now(),name:currentUser.name,phone:currentUser.phone,className:cls,text,stars:selectedStars,
+    date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
+  lsSet('sc:reviews',reviews);
+  document.getElementById('rev-text').value=''; selectedStars=5;
+  renderProfile(); showToast('Review submitted! ✅');
+}
+
+(function(){
+  const s=lsGet('sc:session');
+  if(s&&s.name) currentUser=s;
+  renderNav(); renderHome();
+})();
+</script>
+</body>
+</html>
