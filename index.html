@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SkillConnect | Learn via WhatsApp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -384,7 +384,7 @@
 </div>
 
 <!-- FLOAT -->
-<a href="https://wa.me/2348169518870" target="_blank" class="wa-float" title="Message Admin">
+<a href="https://whatsapp.com/channel/0029VbCNExr0Qeao2RL08325" target="_blank" class="wa-float" title="Join our WhatsApp Channel">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.554 4.1 1.523 5.823L0 24l6.344-1.501A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.768.891.935-3.669-.234-.376A9.818 9.818 0 1112 21.818z"/></svg>
 </a>
 
@@ -401,14 +401,14 @@
 
 <script>
 const GENERAL = [
-  { icon:'🎨', title:'Graphics Design', desc:'Logo design, flyers, branding & real client briefs — from zero to portfolio-ready.', topics:['Logo Design','Flyers','Branding','Canva / Illustrator'] },
-  { icon:'💻', title:'Web Development', desc:'Build real websites with HTML, CSS & JavaScript. Deploy your first site by week 4.', topics:['HTML & CSS','JavaScript','Responsive Design','Deployment'] },
-  { icon:'✨', title:'AI Images & Video', desc:'Create stunning visuals using AI tools — perfect for creators and designers.', topics:['Prompt Writing','Midjourney','AI Video','Commercial Use'] },
+  { icon:'🎨', title:'Graphics Design', desc:'Logo design, flyers, branding & real client briefs — from zero to portfolio-ready.', topics:['Logo Design','Flyers','Branding','Canva / Illustrator'], link:'https://wa.me/2348169518870' },
+  { icon:'💻', title:'Web Development', desc:'Build real websites with HTML, CSS & JavaScript. Deploy your first site by week 4.', topics:['HTML & CSS','JavaScript','Responsive Design','Deployment'], link:'https://chat.whatsapp.com/LPi8JTL2TRJ4QPhfhyPlSV' },
+  { icon:'✨', title:'AI Images & Video', desc:'Create stunning visuals using AI tools — perfect for creators and designers.', topics:['Prompt Writing','Midjourney','AI Video','Commercial Use'], link:'https://wa.me/2348169518870' },
 ];
 const PREMIUM = [
-  { icon:'🚀', title:'Advanced Branding', desc:'Deep-dive into brand strategy, identity systems, and premium client management.', topics:['Brand Strategy','Style Guides','Client Pricing','Presentation'] },
-  { icon:'⚡', title:'Full-Stack Web Dev', desc:'Go beyond HTML — React, backend basics, databases, and deploying real apps.', topics:['React','Node.js','Databases','DevOps'] },
-  { icon:'🤖', title:'AI for Freelancers', desc:'Use AI to 10x your output — automate client work, content, and business ops.', topics:['Workflow Automation','AI Tools','Client Delivery','Passive Income'] },
+  { icon:'🚀', title:'Advanced Branding', desc:'Deep-dive into brand strategy, identity systems, and premium client management.', topics:['Brand Strategy','Style Guides','Client Pricing','Presentation'], link:'https://wa.me/2348169518870' },
+  { icon:'⚡', title:'Full-Stack Web Dev', desc:'Go beyond HTML — React, backend basics, databases, and deploying real apps.', topics:['React','Node.js','Databases','DevOps'], link:'https://wa.me/2348169518870' },
+  { icon:'🤖', title:'AI for Freelancers', desc:'Use AI to 10x your output — automate client work, content, and business ops.', topics:['Workflow Automation','AI Tools','Client Delivery','Passive Income'], link:'https://wa.me/2348169518870' },
 ];
 
 let currentUser = null, selectedStars = 5, toastTimer;
@@ -466,7 +466,7 @@ function renderClassGrid(id, list, isPremium) {
       <div class="tags">${c.topics.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       ${isPremium&&!currentUser
         ?`<button class="btn btn-outline btn-sm" onclick="showPage('signin')">Sign in to unlock</button>`
-        :`<a href="https://wa.me/2348169518870" target="_blank" class="btn btn-purple-outline btn-sm">Join Class &rarr;</a>`}
+        :`<a href="${c.link}" target="_blank" class="btn btn-purple-outline btn-sm">Join Class &rarr;</a>`}
     </div>`).join('');
 }
 
